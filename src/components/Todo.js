@@ -16,6 +16,7 @@ const Todo = (props) => {
     const editButtonRef = useRef(null)
 
     const wasEditing = usePrevious(isEditing)
+    // console.log(props)
 
     useEffect(()=>{
         if(!wasEditing && isEditing) {
@@ -40,7 +41,7 @@ const Todo = (props) => {
         <form className="stack-small" onSubmit={handleSubmit}>
             <div className="form-group">
                 <label className="todo-label" htmlFor={props.id}>
-                    New name for {props.name}
+                    New name for {props.name} 
                 </label>
                 <input 
                 id={props.id} 
@@ -77,6 +78,8 @@ const Todo = (props) => {
                 />
                 <label className="todo-label" htmlFor={props.id}>
                     {props.name}
+                    &nbsp;  | la {props.latitude}
+                    &nbsp; | lo {props.longitude}
                 </label>
             </div>
             <div className="btn-group">
