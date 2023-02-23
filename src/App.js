@@ -28,19 +28,22 @@ function App(props) {
 
   const [filter, setFilter] = useState("All");
   const [lastInsertedId, setLastInsertedId] = useState('')
-
   const listHeadingRef = useRef(null);
   const prevTaskLength = usePrevious(tasks.length);
 
+  // const [latitude, setLatitude] = useState(props.latitude || '##')
+  // const [longitude, setLongitude] = useState(props.longitude || '##')
+  // const [mapLink, setMapLink] = useState(props.mapLink || '#')
+
   const geoFindMe = () => {
     console.log("geoFindMe",lastInsertedId);
-    let mapLink
     function success(position){
       const latitude = position.coords.latitude;
       const longitude = position.coords.longitude;
-      mapLink = `https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`;
+      const mapLink =  `https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`;
+      // console.log(mapLink)
       console.log(`Latitude: ${latitude}°, Longitude: ${longitude}°`);
-      locateTask(lastInsertedId,{latitude:latitude, longitude:longitude, error:''});
+      locateTask(lastInsertedId,{latitude:latitude, longitude:longitude, error:'', mapLink:mapLink});
     }
     function error(){
       console.log('Unable to retrieve your location');
@@ -65,7 +68,7 @@ function App(props) {
 
   const addTask = (name) => {
     const id = `todo-${nanoid()}`;
-    const newTask = { id: id, name, completed: false , location:{latitude:'##',longitude:'##',error:'##'}};
+    const newTask = { id: id, name, completed: false , location:{latitude:'##',longitude:'##',error:'##', mapLink:'##'}};
     setLastInsertedId(id);
     setTasks([...tasks, newTask]);
   };
@@ -108,8 +111,8 @@ function App(props) {
     setTasks(updatedTasks);
   };
 
-  // console.log(tasks)
   const taskList = tasks.map((task) => (
+    <>
     <Todo
       id={task.id}
       name={task.name}
@@ -117,10 +120,12 @@ function App(props) {
       key={task.id}
       latitude={task.location.latitude}
       longitude={task.location.longitude}
+      mapLink={task.location.mapLink}
       toggleTaskCompleted={toggleTaskCompleted}
       deleteTask={deleteTask}
       editTask={editTask}
     />
+    </>
   ));
 
   const filterList = FILTER_NAMES.map((name) => (
