@@ -1,4 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
+import Popup from "reactjs-popup";
+import WebcamCapture from "./WebcamCapture";
+import ViewPhoto from "./ViewPhoto";
 
 function usePrevious(value) {
   const ref = useRef();
@@ -37,7 +40,7 @@ const Todo = (props) => {
     setEditing(false);
   };
 
-  console.log(props.mapLink);
+  // console.log(props.mapLink);
   const editingTemplate = (
     <form className="stack-small" onSubmit={handleSubmit}>
       <div className="form-group">
@@ -79,10 +82,10 @@ const Todo = (props) => {
           onChange={() => props.toggleTaskCompleted(props.id)}
         />
         <label className="todo-label" htmlFor={props.id}>
-          <a href={props.mapLink}>{props.name}
+          {props.name}
           &nbsp; | la {props.latitude}
           &nbsp; | lo {props.longitude}
-          </a>
+          <a href={props.mapLink}> &nbsp; | map</a>
         </label>
       </div>
       <div className="btn-group">
@@ -94,6 +97,40 @@ const Todo = (props) => {
         >
           Edit <span className="visually-hidden">{props.name}</span>
         </button>
+        <Popup
+          trigger={
+            <button type="button" className="btn">
+              Take Photo
+            </button>
+          }
+          modal
+        >
+          <div>
+            <WebcamCapture
+              id={props.id}
+              name={props.name}
+              photoedTask={props.photoedTask}
+            ></WebcamCapture>
+          </div>
+        </Popup>
+
+        <Popup
+          trigger={
+            <button type="button" className="btn">
+              View Photo
+            </button>
+          }
+          modal
+        >
+          <div>
+            <ViewPhoto
+              id={props.id}
+              alt={props.name}
+            ></ViewPhoto>
+          </div>
+        </Popup>
+
+
         <button
           type="button"
           className="btn btn__danger"
